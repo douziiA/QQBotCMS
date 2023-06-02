@@ -2,6 +2,7 @@ package com.douzii.botcms.solver;
 
 import com.douzii.botcms.container.BotAuthorizationContainer;
 import com.douzii.botcms.container.BotContainer;
+import com.douzii.botcms.socket.BotServer;
 import kotlin.coroutines.Continuation;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.auth.QRCodeLoginListener;
@@ -21,6 +22,7 @@ public class BotLoginSolver extends LoginSolver {
 
     @Autowired
     BotContainer botContainer;
+
     @Nullable
     @Override
     public Object onSolvePicCaptcha(@NotNull Bot bot, @NotNull byte[] bytes, @NotNull Continuation<? super String> continuation) {
@@ -54,6 +56,7 @@ public class BotLoginSolver extends LoginSolver {
                     case CONFIRMED -> {
                         botContainer.addBot(bot);
                         botAuthorizationContainer.deleteCode(bot.getId());
+                        BotServer.webSockets.stream().filter(socket->socket.getQq() == bot.getId()).findFirst().get().getSession().getAsyncRemote().sendText("登录成功");
                     }
                     case CANCELLED -> {
                         botAuthorizationContainer.deleteCode(bot.getId());

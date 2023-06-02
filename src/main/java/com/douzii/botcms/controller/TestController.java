@@ -55,7 +55,7 @@ public class TestController {
      * @param qq qq号
      * @return
      */
-    @PostMapping("/login")
+//    @PostMapping("/login")
     public Result login(@RequestParam long qq) throws BotCMSException {
         if (botContainer.hasBot(qq)){
             throw new BotCMSException(HttpStatus.BAD_REQUEST,"已经登录过了");

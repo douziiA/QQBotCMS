@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -30,5 +31,9 @@ public class BotConfig extends WebMvcConfigurationSupport {
     public ServerSocket socket() throws IOException {
         ServerSocket socket = new ServerSocket(port);
         return socket;
+    }
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
     }
 }

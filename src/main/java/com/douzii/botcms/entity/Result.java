@@ -51,13 +51,13 @@ public class Result {
     public Result(HttpStatus status, String message) {
         this.status = status.value();
         this.message = message;
-        this.date = new SimpleDateFormat("Y-M-d h:m:s").format(new Date());
+        this.date = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
 
     }
     public Result(HttpStatus status, Object data) {
         this.status = status.value();
         this.data = data;
-        this.date = new SimpleDateFormat("Y-M-d h:m:s").format(new Date());
+        this.date = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
 
     }
 
@@ -65,7 +65,7 @@ public class Result {
         this.status = status.value();
         this.data = data;
         this.message = message;
-        this.date = new SimpleDateFormat("Y-M-d h:m:s").format(new Date());
+        this.date = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
     }
 
     private String message;

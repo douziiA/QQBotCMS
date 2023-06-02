@@ -1,4 +1,4 @@
-package com.douzii.miraibot;
+package com.douzii.botcms;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

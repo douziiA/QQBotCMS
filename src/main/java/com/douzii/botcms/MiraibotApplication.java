@@ -1,11 +1,5 @@
-package com.douzii.miraibot;
+package com.douzii.botcms;
 
-import com.douzii.miraibot.solver.BotLoginSolver;
-import net.mamoe.mirai.Bot;
-import net.mamoe.mirai.BotFactory;
-import net.mamoe.mirai.auth.BotAuthorization;
-import net.mamoe.mirai.utils.BotConfiguration;
-import net.mamoe.mirai.utils.StandardCharImageLoginSolver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

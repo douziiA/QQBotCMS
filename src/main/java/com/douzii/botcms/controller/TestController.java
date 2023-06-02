@@ -1,14 +1,13 @@
-package com.douzii.miraibot.controller;
+package com.douzii.botcms.controller;
 
-import com.douzii.miraibot.container.BotAuthorizationContainer;
-import com.douzii.miraibot.container.BotContainer;
-import com.douzii.miraibot.solver.BotLoginSolver;
+import com.douzii.botcms.container.BotAuthorizationContainer;
+import com.douzii.botcms.container.BotContainer;
+import com.douzii.botcms.solver.BotLoginSolver;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 

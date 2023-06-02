@@ -1,7 +1,7 @@
-package com.douzii.miraibot.solver;
+package com.douzii.botcms.solver;
 
-import com.douzii.miraibot.container.BotAuthorizationContainer;
-import com.douzii.miraibot.container.BotContainer;
+import com.douzii.botcms.container.BotAuthorizationContainer;
+import com.douzii.botcms.container.BotContainer;
 import kotlin.coroutines.Continuation;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.auth.QRCodeLoginListener;

@@ -1,4 +1,4 @@
-package com.douzii.miraibot.container;
+package com.douzii.botcms.container;
 
 import org.springframework.stereotype.Component;
 

@@ -26,7 +26,12 @@ public class TestController {
     @Autowired
     BotAuthorizationContainer botAuthorizationContainer;
 
-
+    /**
+     * @path GET/code
+     * 获取qq二维码
+     * @param qq
+     * @return
+     */
     @GetMapping(value = "/code",produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] QRCode(@RequestParam long qq){
         return botAuthorizationContainer.getCode(qq);
@@ -56,6 +61,11 @@ public class TestController {
         }
     }
 
+    /**
+     * @path GET/
+     * 获取已登录的机器人
+     * @return
+     */
     @GetMapping
     public List<Long> getBots(){
         List<Long> bots = new ArrayList<>();

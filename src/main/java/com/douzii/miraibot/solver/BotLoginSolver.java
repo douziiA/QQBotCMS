@@ -11,6 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 自定义登录解决器
+ */
 @Component
 public class BotLoginSolver extends LoginSolver {
     @Autowired
@@ -34,11 +37,16 @@ public class BotLoginSolver extends LoginSolver {
     @Override
     public QRCodeLoginListener createQRCodeLoginListener(@NotNull Bot bot) {
         return new QRCodeLoginListener() {
+            /**
+             * 二维码更新调用的方法
+             */
             @Override
             public void onFetchQRCode(@NotNull Bot bot, @NotNull byte[] bytes) {
                 botAuthorizationContainer.addAuthorizationCode(bot.getId(),bytes);
             }
-
+            /**
+             * 登录后调用的方法
+             */
             @Override
             public void onStateChanged(@NotNull Bot bot, @NotNull QRCodeLoginListener.State state) {
                 switch (state){

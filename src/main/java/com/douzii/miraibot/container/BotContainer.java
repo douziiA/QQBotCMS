@@ -41,9 +41,21 @@ public class BotContainer {
 
         this.botList.add(bot);
     }
+
+    /**
+     * 获取qq机器人
+     * @param qq
+     * @return
+     */
     public Bot getBot(long qq){
         return this.botList.stream().filter(bot -> bot.getId() == qq).findFirst().orElse(null);
     }
+
+    /**
+     * 判断qq机器人是否登录
+     * @param qq
+     * @return
+     */
     public boolean hasBot(long qq){
         return !this.botList.stream().filter(bot -> bot.getId() == qq).findAny().isEmpty();
     }

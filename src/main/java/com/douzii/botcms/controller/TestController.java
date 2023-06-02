@@ -2,12 +2,16 @@ package com.douzii.botcms.controller;
 
 import com.douzii.botcms.container.BotAuthorizationContainer;
 import com.douzii.botcms.container.BotContainer;
+import com.douzii.botcms.entity.Result;
+import com.douzii.botcms.exception.BotCMSException;
 import com.douzii.botcms.solver.BotLoginSolver;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +36,12 @@ public class TestController {
      * @return
      */
     @GetMapping(value = "/code",produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] QRCode(@RequestParam long qq){
+    public byte[] QRCode(@RequestParam long qq) throws BotCMSException {
+
+        if (!botAuthorizationContainer.getCodeMap().containsKey(qq)){
+          throw new BotCMSException(HttpStatus.BAD_REQUEST,"请先开始登录操作");
+        }
+
         return botAuthorizationContainer.getCode(qq);
     }
 
@@ -43,9 +52,9 @@ public class TestController {
      * @return
      */
     @PostMapping("/login")
-    public String login(@RequestParam long qq){
+    public Result login(@RequestParam long qq) throws BotCMSException {
         if (botContainer.hasBot(qq)){
-            return "该QQ已经登录了";
+            throw new BotCMSException(HttpStatus.BAD_REQUEST,"已经登录过了");
         }
 
         Bot bot = BotFactory.INSTANCE.newBot(qq, BotAuthorization.byQRCode(), configuration -> {
@@ -54,9 +63,9 @@ public class TestController {
         });
         bot.login();
         if (bot.isOnline()){
-            return "登录成功";
+            return new Result(HttpStatus.OK,"登录成功");
         }else {
-            return "登录失败";
+            throw new BotCMSException(HttpStatus.UNAUTHORIZED,"验证失败");
         }
     }
 
@@ -66,12 +75,12 @@ public class TestController {
      * @return
      */
     @GetMapping
-    public List<Long> getBots(){
+    public Result getBots(){
         List<Long> bots = new ArrayList<>();
         for (Bot bot : botContainer.getBotList()) {
             bots.add(bot.getId());
         }
-        return bots;
+        return new Result(HttpStatus.OK,bots);
     }
 
 }

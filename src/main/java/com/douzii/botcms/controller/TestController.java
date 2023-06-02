@@ -5,10 +5,14 @@ import com.douzii.botcms.container.BotContainer;
 import com.douzii.botcms.entity.Result;
 import com.douzii.botcms.exception.BotCMSException;
 import com.douzii.botcms.solver.BotLoginSolver;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.utils.BotConfiguration;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -62,11 +66,13 @@ public class TestController {
             configuration.setLoginSolver(botLoginSolver);
         });
         bot.login();
+
         if (bot.isOnline()){
             return new Result(HttpStatus.OK,"登录成功");
-        }else {
-            throw new BotCMSException(HttpStatus.UNAUTHORIZED,"验证失败");
+        }else{
+            return new Result(HttpStatus.UNAUTHORIZED,"验证失败：请重新登录");
         }
+
     }
 
     /**
@@ -77,10 +83,11 @@ public class TestController {
     @GetMapping
     public Result getBots(){
         List<Long> bots = new ArrayList<>();
-        for (Bot bot : botContainer.getBotList()) {
+        for (Bot bot : Bot.getInstances()) {
             bots.add(bot.getId());
         }
         return new Result(HttpStatus.OK,bots);
     }
+
 
 }

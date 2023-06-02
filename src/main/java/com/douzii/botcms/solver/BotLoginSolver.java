@@ -42,6 +42,7 @@ public class BotLoginSolver extends LoginSolver {
              */
             @Override
             public void onFetchQRCode(@NotNull Bot bot, @NotNull byte[] bytes) {
+                botAuthorizationContainer.deleteCode(bot.getId());
                 botAuthorizationContainer.addAuthorizationCode(bot.getId(),bytes);
             }
             /**
@@ -52,6 +53,9 @@ public class BotLoginSolver extends LoginSolver {
                 switch (state){
                     case CONFIRMED -> {
                         botContainer.addBot(bot);
+                        botAuthorizationContainer.deleteCode(bot.getId());
+                    }
+                    case CANCELLED -> {
                         botAuthorizationContainer.deleteCode(bot.getId());
                     }
                 }

@@ -53,7 +53,7 @@ public class BotContainer {
      * @param qq
      * @return
      */
-    public boolean hasBot(long qq){
-        return !this.botList.stream().filter(bot -> bot.getId() == qq).findAny().isEmpty();
+    public static boolean hasBot(long qq){
+        return !Bot.getInstances().stream().filter(bot -> bot.getId() == qq && bot.isOnline()).findFirst().isEmpty();
     }
 }

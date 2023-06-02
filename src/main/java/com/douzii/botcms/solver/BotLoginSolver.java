@@ -3,6 +3,8 @@ package com.douzii.botcms.solver;
 import com.douzii.botcms.container.BotAuthorizationContainer;
 import com.douzii.botcms.container.BotContainer;
 import com.douzii.botcms.socket.BotServer;
+import jakarta.websocket.CloseReason;
+import jakarta.websocket.Session;
 import kotlin.coroutines.Continuation;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.auth.QRCodeLoginListener;
@@ -11,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * 自定义登录解决器
@@ -56,7 +60,14 @@ public class BotLoginSolver extends LoginSolver {
                     case CONFIRMED -> {
                         botContainer.addBot(bot);
                         botAuthorizationContainer.deleteCode(bot.getId());
-                        BotServer.webSockets.stream().filter(socket->socket.getQq() == bot.getId()).findFirst().get().getSession().getAsyncRemote().sendText("登录成功");
+                        try {
+                            Session session = BotServer.webSockets.stream().filter(socket -> socket.getQq() == bot.getId()).findFirst().get().getSession();
+                            session.getAsyncRemote().sendText("登录成功");
+                            session.close(new CloseReason(CloseReason.CloseCodes.NO_STATUS_CODE,"登录成功"));
+                        } catch (IOException e) {
+
+                        }
+
                     }
                     case CANCELLED -> {
                         botAuthorizationContainer.deleteCode(bot.getId());

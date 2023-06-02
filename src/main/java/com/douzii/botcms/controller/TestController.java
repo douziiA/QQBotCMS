@@ -4,6 +4,7 @@ import com.douzii.botcms.container.BotAuthorizationContainer;
 import com.douzii.botcms.container.BotContainer;
 import com.douzii.botcms.entity.Result;
 import com.douzii.botcms.exception.BotCMSException;
+import com.douzii.botcms.service.BotLoginServiceImpl;
 import com.douzii.botcms.solver.BotLoginSolver;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
@@ -27,11 +28,9 @@ import java.util.List;
 
 public class TestController {
     @Autowired
-    BotLoginSolver botLoginSolver;
+    BotLoginServiceImpl botLoginService;
     @Autowired
     BotContainer botContainer;
-    @Autowired
-    BotAuthorizationContainer botAuthorizationContainer;
 
     /**
      * @path GET/code
@@ -41,39 +40,13 @@ public class TestController {
      */
     @GetMapping(value = "/code",produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] QRCode(@RequestParam long qq) throws BotCMSException {
-
-        if (!botAuthorizationContainer.getCodeMap().containsKey(qq)){
-          throw new BotCMSException(HttpStatus.BAD_REQUEST,"请先开始登录操作");
-        }
-
-        return botAuthorizationContainer.getCode(qq);
-    }
-
-    /**
-     * @path POST/login
-     * 登录qq机器人/手表协议
-     * @param qq qq号
-     * @return
-     */
-//    @PostMapping("/login")
-    public Result login(@RequestParam long qq) throws BotCMSException {
         if (botContainer.hasBot(qq)){
-            throw new BotCMSException(HttpStatus.BAD_REQUEST,"已经登录过了");
+            throw new BotCMSException(HttpStatus.OK,"此账号已经登录");
+        }else {
+            return botLoginService.getQRCode(qq);
         }
-
-        Bot bot = BotFactory.INSTANCE.newBot(qq, BotAuthorization.byQRCode(), configuration -> {
-            configuration.setProtocol(BotConfiguration.MiraiProtocol.ANDROID_WATCH);
-            configuration.setLoginSolver(botLoginSolver);
-        });
-        bot.login();
-
-        if (bot.isOnline()){
-            return new Result(HttpStatus.OK,"登录成功");
-        }else{
-            return new Result(HttpStatus.UNAUTHORIZED,"验证失败：请重新登录");
-        }
-
     }
+
 
     /**
      * @path GET/
@@ -83,8 +56,10 @@ public class TestController {
     @GetMapping
     public Result getBots(){
         List<Long> bots = new ArrayList<>();
+
         for (Bot bot : Bot.getInstances()) {
             bots.add(bot.getId());
+            System.out.println(bot.isOnline());
         }
         return new Result(HttpStatus.OK,bots);
     }

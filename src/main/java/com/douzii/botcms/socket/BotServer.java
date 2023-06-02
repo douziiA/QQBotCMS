@@ -1,12 +1,10 @@
 package com.douzii.botcms.socket;
 
 import com.douzii.botcms.container.BotAuthorizationContainer;
+import com.douzii.botcms.container.BotContainer;
 import com.douzii.botcms.solver.BotLoginSolver;
 import jakarta.annotation.PostConstruct;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
+import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 
@@ -45,10 +44,18 @@ public class BotServer {
     private Thread thread;
     private Bot bot;
     @OnOpen
-    public void onOpen(Session session, @PathParam(value = "qq")long qq){
+    public void onOpen(Session session, @PathParam(value = "qq")long qq) throws IOException {
         this.session = session;
         this.qq = qq;
         webSockets.add(this);
+
+        System.out.println(BotContainer.hasBot(qq));
+        if (BotContainer.hasBot(qq)){
+            session.close();
+            log.info(qq+"该账号已登录");
+            return;
+        }
+
         this.bot = BotFactory.INSTANCE.newBot(qq, BotAuthorization.byQRCode(), configuration -> {
             configuration.setProtocol(BotConfiguration.MiraiProtocol.ANDROID_WATCH);
             configuration.setLoginSolver(botLoginSolver);
@@ -68,11 +75,12 @@ public class BotServer {
     }
 
     @OnClose
-    public void onClose(){
+    public void onClose(CloseReason closeReason){
         webSockets.remove(this);
         botAuthorizationContainer.deleteCode(qq);
-        bot.close();
         thread.interrupt();
-
+        if (closeReason.getCloseCode() != CloseReason.CloseCodes.NO_STATUS_CODE){
+            bot.close();
+        }
     }
 }

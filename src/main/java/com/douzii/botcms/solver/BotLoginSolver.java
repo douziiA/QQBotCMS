@@ -42,6 +42,8 @@ public class BotLoginSolver extends LoginSolver {
         return null;
     }
 
+
+
     @NotNull
     @Override
     public QRCodeLoginListener createQRCodeLoginListener(@NotNull Bot bot) {
@@ -56,28 +58,31 @@ public class BotLoginSolver extends LoginSolver {
                 Session session = BotServer.webSockets.stream().filter(socket -> socket.getQq() == bot.getId()).findFirst().get().getSession();
                 session.getAsyncRemote().sendText("开始验证");
             }
+
             /**
              * 登录后调用的方法
              */
             @Override
             public void onStateChanged(@NotNull Bot bot, @NotNull QRCodeLoginListener.State state) {
+                Session session = BotServer.webSockets.stream().filter(socket -> socket.getQq() == bot.getId()).findFirst().get().getSession();
                 switch (state){
                     case CONFIRMED -> {
-                        botContainer.addBot(bot);
                         botAuthorizationContainer.deleteCode(bot.getId());
                         bot.getEventChannel().registerListenerHost(botEvent);
-                        try {
-                            Session session = BotServer.webSockets.stream().filter(socket -> socket.getQq() == bot.getId()).findFirst().get().getSession();
-                            session.getAsyncRemote().sendText("登录成功");
-                            session.close(new CloseReason(CloseReason.CloseCodes.NO_STATUS_CODE,"登录成功"));
-                        } catch (IOException e) {
-
-                        }
+                        session.getAsyncRemote().sendText("扫码成功");
 
                     }
                     case CANCELLED -> {
-                        botAuthorizationContainer.deleteCode(bot.getId());
+                        session.getAsyncRemote().sendText("取消扫码");
                     }
+                    case TIMEOUT -> {
+                        session.getAsyncRemote().sendText("扫码过期");
+                    }
+                    case WAITING_FOR_CONFIRM -> {
+                        System.out.println("确认中");
+                        session.getAsyncRemote().sendText("确认中");
+                    }
+
                 }
             }
         };

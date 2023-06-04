@@ -1,5 +1,6 @@
 package com.douzii.botcms;
 
+import com.douzii.botcms.event.BotEvent;
 import kotlin.coroutines.CoroutineContext;
 import kotlinx.coroutines.CoroutineScope;
 import net.mamoe.mirai.event.EventChannel;
@@ -12,7 +13,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MiraibotApplication {
 
     public static void main(String[] args) {
-        GlobalEventChannel.INSTANCE.parentScope((CoroutineScope) GlobalEventChannel.INSTANCE.getDefaultCoroutineContext());
         SpringApplication.run(MiraibotApplication.class, args);
 
     }

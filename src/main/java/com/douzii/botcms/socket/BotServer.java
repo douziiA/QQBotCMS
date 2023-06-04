@@ -2,6 +2,7 @@ package com.douzii.botcms.socket;
 
 import com.douzii.botcms.container.BotAuthorizationContainer;
 import com.douzii.botcms.container.BotContainer;
+import com.douzii.botcms.event.BotEvent;
 import com.douzii.botcms.solver.BotLoginSolver;
 import jakarta.annotation.PostConstruct;
 import jakarta.websocket.*;
@@ -26,6 +27,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class BotServer {
     public static BotLoginSolver botLoginSolver;
     public static BotAuthorizationContainer botAuthorizationContainer;
+
 
     @Autowired
     public  void setBotAuthorizationContainer(BotAuthorizationContainer botAuthorizationContainer) {

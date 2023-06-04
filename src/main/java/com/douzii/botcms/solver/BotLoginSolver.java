@@ -2,6 +2,7 @@ package com.douzii.botcms.solver;
 
 import com.douzii.botcms.container.BotAuthorizationContainer;
 import com.douzii.botcms.container.BotContainer;
+import com.douzii.botcms.event.BotEvent;
 import com.douzii.botcms.socket.BotServer;
 import jakarta.websocket.CloseReason;
 import jakarta.websocket.Session;
@@ -26,6 +27,8 @@ public class BotLoginSolver extends LoginSolver {
 
     @Autowired
     BotContainer botContainer;
+    @Autowired
+    BotEvent botEvent;
 
     @Nullable
     @Override
@@ -60,6 +63,7 @@ public class BotLoginSolver extends LoginSolver {
                     case CONFIRMED -> {
                         botContainer.addBot(bot);
                         botAuthorizationContainer.deleteCode(bot.getId());
+                        bot.getEventChannel().registerListenerHost(botEvent);
                         try {
                             Session session = BotServer.webSockets.stream().filter(socket -> socket.getQq() == bot.getId()).findFirst().get().getSession();
                             session.getAsyncRemote().sendText("登录成功");

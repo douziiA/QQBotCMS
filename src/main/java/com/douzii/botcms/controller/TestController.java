@@ -21,7 +21,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("bot")
@@ -39,6 +41,8 @@ public class TestController {
      * @return
      */
     @GetMapping(value = "/code",produces = MediaType.IMAGE_PNG_VALUE)
+    @CrossOrigin
+
     public byte[] QRCode(@RequestParam long qq) throws BotCMSException {
         if (botContainer.hasBot(qq)){
             throw new BotCMSException(HttpStatus.OK,"此账号已经登录");
@@ -54,12 +58,20 @@ public class TestController {
      * @return
      */
     @GetMapping
+    @CrossOrigin
     public Result getBots(){
-        List<Long> bots = new ArrayList<>();
+        List<Map> bots = new ArrayList<>();
 
         for (Bot bot : Bot.getInstances()) {
-            bots.add(bot.getId());
-            System.out.println(bot.isOnline());
+            Map map = new HashMap();
+            map.put("qq",bot.getId());
+            map.put("online",bot.isOnline());
+            if (bot.isOnline()){
+                map.put("group",bot.getGroups().size());
+                map.put("friend",bot.getFriends().size());
+            }
+
+            bots.add(map);
         }
         return new Result(HttpStatus.OK,bots);
     }

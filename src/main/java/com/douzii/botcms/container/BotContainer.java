@@ -45,7 +45,7 @@ public class BotContainer {
      * @return
      */
     public Bot getBot(long qq){
-        return this.botList.stream().filter(bot -> bot.getId() == qq).findFirst().orElse(null);
+        return Bot.getInstances().stream().filter(bot -> bot.getId() == qq).findFirst().orElse(null);
     }
 
     /**

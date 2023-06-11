@@ -62,6 +62,7 @@ public class BotLoginController {
 
             bots.add(map);
         }
+
         return new Result(HttpStatus.OK,bots);
     }
     @DeleteMapping

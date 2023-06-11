@@ -53,6 +53,7 @@ public class BotLoginSolver extends LoginSolver {
              */
             @Override
             public void onFetchQRCode(@NotNull Bot bot, @NotNull byte[] bytes) {
+
                 botAuthorizationContainer.deleteCode(bot.getId());
                 botAuthorizationContainer.addAuthorizationCode(bot.getId(),bytes);
                 Session session = BotServer.webSockets.stream().filter(socket -> socket.getQq() == bot.getId()).findFirst().get().getSession();

@@ -22,13 +22,13 @@ public class CMSHandlerException {
         if (runtimeException instanceof BotCMSException){
             return handler2((BotCMSException) runtimeException);
         }
-        ResponseEntity.BodyBuilder builder = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        ResponseEntity.BodyBuilder builder = ResponseEntity.ok();
         ResponseEntity<Result> entity = builder.body(new Result(HttpStatus.INTERNAL_SERVER_ERROR, "服务器出现了问题请联系管理员进行维修"));
         return entity;
     }
 
     public ResponseEntity handler2(BotCMSException botCMSException){
-        ResponseEntity.BodyBuilder builder = ResponseEntity.status(botCMSException.getStatus());
+        ResponseEntity.BodyBuilder builder = ResponseEntity.ok();
         ResponseEntity<Result> entity = builder.body(new Result(botCMSException.getStatus(), botCMSException.getMessage()));
         return entity;
     }

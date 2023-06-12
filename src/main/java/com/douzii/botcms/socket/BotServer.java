@@ -146,8 +146,5 @@ public class BotServer {
         webSockets.remove(this);
         botAuthorizationContainer.deleteCode(qq);
         thread.interrupt();
-        if (closeReason.getCloseCode() != CloseReason.CloseCodes.NO_STATUS_CODE){
-            bot.close();
-        }
     }
 }

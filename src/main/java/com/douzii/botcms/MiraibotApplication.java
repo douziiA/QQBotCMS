@@ -1,6 +1,7 @@
 package com.douzii.botcms;
 
 import com.douzii.botcms.event.BotEvent;
+import com.douzii.botcms.plugin.PluginUntil;
 import kotlin.Lazy;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
@@ -30,8 +31,10 @@ import net.mamoe.mirai.utils.LoginSolver;
 import net.mamoe.mirai.utils.MiraiLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -42,7 +45,7 @@ public class MiraibotApplication {
     public static void main(String[] args) {
         SpringApplication.run(MiraibotApplication.class, args);
         MiraiConsoleTerminalLoader.main(args);
-        PluginManager pluginManager = MiraiConsole.INSTANCE.getPluginManager();
+
     }
 
 }

@@ -37,7 +37,6 @@ public class BotEvent extends SimpleListenerHost {
         Bot bot = event.getBot();
 
 
-        System.out.println(JvmPluginLoader.BuiltIn.listPlugins());
         Session session = BotServer.webSockets.stream().filter(socket -> socket.getQq() == bot.getId()).findFirst().get().getSession();
         session.getAsyncRemote().sendText("登录成功");
         session.close(new CloseReason(CloseReason.CloseCodes.NO_STATUS_CODE,"登录成功"));

@@ -15,7 +15,13 @@ import kotlin.jvm.functions.Function3;
 import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
+import net.mamoe.mirai.Mirai;
 import net.mamoe.mirai.auth.BotAuthorization;
+import net.mamoe.mirai.console.MiraiConsole;
+import net.mamoe.mirai.console.terminal.MiraiConsoleImplementationTerminal;
+import net.mamoe.mirai.console.terminal.MiraiConsoleTerminalLoader;
+import net.mamoe.mirai.contact.AvatarSpec;
+import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.utils.BotConfiguration;
 import net.mamoe.mirai.utils.MiraiLogger;
 import net.mamoe.mirai.utils.SimpleLogger;
@@ -84,7 +90,6 @@ public class BotServer {
 
 
             configuration.setBotLoggerSupplier(bot1 -> new SimpleLogger("Bot", (logPriority, s, throwable) -> {
-
                 String path = "log/" + bot1.getId();
                 File file = new File(path);
                 if (!file.exists()){
@@ -109,7 +114,7 @@ public class BotServer {
                 StringBuilder builder = new StringBuilder();
                 builder
                         .append("<span class='logTime'>"+new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date())+"</span>")
-                        .append(" <span class='el-tag el-tag--success el-tag--dark'><span class='el-tag__content'>" + logPriority.getNameAligned() + "</span></span><span class='el-avatar el-avatar--circle'><img src='" + bot1.getAvatarUrl() + "' style=\"object-fit: cover;\" /></span>")
+                        .append(" <span class='el-tag el-tag--success el-tag--dark'><span class='el-tag__content'>" + logPriority.getNameAligned() + "</span></span>")
                         .append(" " + s);
 
                 try {
